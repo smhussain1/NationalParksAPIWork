@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>YouTube API Assignment</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    
+</head>
+<body>
+    <main role="main">
+        <legend role="legend">
+            <form role="user-entry-form" class="entry-form">
+                <label class="state-entry-label">Please Enter the State of the Parks You Would Like to See</label>
+                <input id="state-entry" type="text" value="CA" for="user-input">
+                <label class="max-results">Max Results You Would Like to See</label>
+                <input id="input-max-results" type="number" value="10" for="max-results">
+                <label class="submit-entry">Click to Submit your Request</label>
+                <input id="submit" type="submit" value="Submit!" name="submit">
+            </form>
+        </legend>
+    </main>
+        <section class="display-results hidden">
+            <h2>Here are the Results from Your Search!</h2>
+
+        </section>
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src='main.js'></script>
+</body>
+</html>
