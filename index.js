@@ -22,28 +22,56 @@ const key = "ha8eO1B6b3yBeBy0HIzbrkdkusBUYTI3Hb0Xmsse";
 const baseUrl = 'https://developer.nps.gov/api/v1/parks';
 
 function userSearch() {
+    
     // grabs the name of the park(s) in the state that the user wants to see
     $('.entry-form').submit(function(event) {  
         event.preventDefault();
-        let state = $("#state-entry").val();
+        //let states = [];
+        //states.push($("#state-entry1").val());
+        $('.display-results').empty();
+        let entry = $("#state-entry1").val();
+        let states= entry.split(",");
+        console.log(states);
         let maxResults = $('#input-max-results').val();
         maxResults = parseInt(maxResults, 10);
-        console.log(typeof maxResults);
-        console.log(state, maxResults);
-        callApi(state, key, maxResults);
+        console.log(states, maxResults);
+        stateCodes(states, key, maxResults);
         }
       )
-
 }
 
-function callApi(state, key, maxResults) {
+function stateCodes(states, key, maxResults) {
+  console.log(states);
+  let allStateCodes = "";
+  for (let i=0; i<states.length; i++) {
+  let state = states[i];
+  let stateCode = "stateCode=" + state;
+  allStateCodes = stateCode + "&";  
+  callApi(allStateCodes, key, maxResults);
+
+  }
+  
+  console.log(allStateCodes);
+}
+
+function callApi(allStateCodes, key, maxResults) {
     // exeuctes call to the API and gets the data
     //first submit API:
     // let searchUrl = startUrl + key + extentionUrl + "?" + stateCode;
     // console.log(searchUrl);
+    /*
+  console.log(states);
+  for (let i = 0; i < states.length; i++) {
+    let state = states[i];
     let stateCode = "stateCode=" + state;
+    console.log(stateCode);
+    let allStateCodes = stateCode + "&" + stateCode;
+    console.log(allStateCodes);
+    */
+    console.log(allStateCodes);
     let apiKey = "api_key=" + key;
-    let searchUrl = baseUrl + "?" + stateCode + "&" + apiKey;
+    let searchUrl = baseUrl + "?" + allStateCodes + apiKey;
+    console.log(searchUrl);
     fetch(searchUrl)
         .then(response=>{
             //console.log(response)
@@ -59,20 +87,19 @@ function callApi(state, key, maxResults) {
           displayResults(responseJson, maxResults)) 
         //.catch(error=>alert('Sorry - that State Park was not found!', error));
 }
+//}
  
 function displayResults(responseJson, maxResults) {
     // displays final results to users, after clearing out previous results
     // displays Full Name of Park, Description, URL and Address
     // handles any errors with search
-            $('.display-results').empty();
-            console.log('test');
+            // $('.display-results').empty();
             let newHTML = " ";
             console.log(responseJson.data.length);
-            console.log(maxResults);
             for(let i=0; i<responseJson.data.length & i < maxResults; i++) { // do i need to iterate thru 'reponseJson.data?
-            console.log('testing loop');
             newHTML +=
               `<div class="display-resultsJson"> 
+              <p>${responseJson.data[i].states}</p>
               <P>${responseJson.data[i].fullName}</p>
               <p>${responseJson.data[i].description}</P>
               <a href='${responseJson.data[i].url}'>Website</a>     
@@ -83,7 +110,7 @@ function displayResults(responseJson, maxResults) {
             if (newHTML == " ") {
                 alert('This State has no Parks');
             } else {
-            $('.display-results').html(newHTML);
+            $('.display-results').append(newHTML);
             $('.parks-results').removeClass('hidden');
             }
             // console.log(newHTML);
